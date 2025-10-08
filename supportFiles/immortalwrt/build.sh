@@ -18,7 +18,7 @@ echo "🚀 开始执行 build.sh ..."
 
 echo Install required tools
 apt-get update
-apt-get -y install debootstrap squashfs-tools xorriso isolinux syslinux-efi  grub-pc-bin grub-efi-amd64-bin mtools dosfstools parted
+apt-get -y install debootstrap squashfs-tools xorriso isolinux syslinux-efi grub-pc-bin grub-efi-amd64-bin mtools dosfstools parted
 
 echo Create directory where we will make the image
 mkdir -p $HOME/LIVE_BOOT
@@ -36,6 +36,13 @@ echo Mounting dev / proc / sys
 mount -t proc none $HOME/LIVE_BOOT/chroot/proc
 mount -o bind /dev $HOME/LIVE_BOOT/chroot/dev
 mount -o bind /sys $HOME/LIVE_BOOT/chroot/sys
+
+# === 添加自动安装脚本 ===
+echo "💿 添加自动安装脚本 auto_install.sh ..."
+mkdir -p $HOME/LIVE_BOOT/chroot/installer
+cp -v /supportFiles/immortalwrt/auto_install.sh $HOME/LIVE_BOOT/chroot/installer/
+chmod +x $HOME/LIVE_BOOT/chroot/installer/auto_install.sh
+# ========================
 
 echo Run install script inside chroot
 chroot $HOME/LIVE_BOOT/chroot /installChroot.sh
